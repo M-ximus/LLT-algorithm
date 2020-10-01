@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-const double PRES = 0.000000000000001;
+const double PRES = 0.00000000000001;
 
 enum errors{
     E_ERROR   = -1,
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         exit(EXIT_FAILURE);
     }
 
-    //print_sq_matrix(&L);
+    print_sq_matrix(&L);
 
     vector result;
     ret = solve_eq(&L, &f, &result);
@@ -204,11 +204,11 @@ int solve_eq(sq_matrix* L, vector* f, vector* res)
         for (int col = 0; col < i; col++)
             temp_vector.arr[i] -= temp_vector.arr[col] * L->data[i][col];
 
-        temp_vector.arr[i] /= L->data[i][i];
+        temp_vector.arr[i] = temp_vector.arr[i] / L->data[i][i];
     }
 
     //for (int i = 0; i < dim; i++)
-    //    printf("%lg\n", temp_vector.arr[i]);
+        //printf("%lg\n", temp_vector.arr[i]);
 
     ret = init_vector(res, dim);
     if (ret < 0)
@@ -230,9 +230,9 @@ int solve_eq(sq_matrix* L, vector* f, vector* res)
         res->arr[i] = temp_vector.arr[i];
 
         for (int row = i + 1; row < dim; row++)
-            res->arr[i] -= temp_vector.arr[row] * L->data[row][i];
+            res->arr[i] -= res->arr[row] * L->data[row][i];
 
-        res->arr[i] /= L->data[i][i];
+        res->arr[i] = res->arr[i] / L->data[i][i];
     }
 
     //printf("\n");
@@ -256,7 +256,7 @@ int print_sq_matrix(sq_matrix* matr)
     for (int i = 0; i < matr->metrics; i++)
     {
         for (int j = 0; j < matr->metrics; j++)
-            printf("%lg ", matr->data[i][j]);
+            printf("%10lg ", matr->data[i][j]);
         printf("\n");
     }
 }
